@@ -766,6 +766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1078b1aac91a14913b767b7e0417488d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RealmAppId: space-shooter-ubpkp
   enemyTimer: 1
   timeUntilEnemy: 0.5
   minTimeUntilEnemy: 0.25
