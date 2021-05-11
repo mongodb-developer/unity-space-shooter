@@ -768,3 +768,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyTimer: 1
   timeUntilEnemy: 0.5
+  minTimeUntilEnemy: 0.25
+  maxTimeUntilEnemy: 1
