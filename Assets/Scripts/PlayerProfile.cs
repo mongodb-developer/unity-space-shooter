@@ -5,11 +5,12 @@ using MongoDB.Bson;
 public class PlayerProfile : RealmObject
 {
 
+    // [PrimaryKey]
+    // [MapTo("_id")]
+    // public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
+
     [PrimaryKey]
     [MapTo("_id")]
-    public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
-
-    [MapTo("user_id")]
     public string UserId { get; set; }
 
     [MapTo("high_score")]
@@ -22,7 +23,7 @@ public class PlayerProfile : RealmObject
     public bool CrossBlasterEnabled { get; set; }
 
     public PlayerProfile() {
-        
+
     }
 
     public PlayerProfile(string userId) {

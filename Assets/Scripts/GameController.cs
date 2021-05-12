@@ -28,10 +28,12 @@ public class GameController : MonoBehaviour {
     private PlayerProfile _playerProfile;
 
     async void OnEnable() {
-        _realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.Anonymous());
+        //_realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.Anonymous());
+        _realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.EmailPassword("nic.raboy@mongodb.com", "password1234"));
         Debug.Log("Logged in with user " + _realmUser.Id);
         _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
-        _playerProfile = _realm.Find<PlayerProfile>(ObjectId.Parse(_realmUser.Id));
+        //_playerProfile = _realm.Find<PlayerProfile>(ObjectId.Parse(_realmUser.Id));
+        _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
         if(_playerProfile == null) {
             _realm.Write(() => {
                 _playerProfile = _realm.Add(new PlayerProfile(_realmUser.Id));
