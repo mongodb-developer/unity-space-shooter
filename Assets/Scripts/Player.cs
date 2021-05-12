@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Enemy" && isRespawn == false) {
             _animator.SetBool("doExplode", true);
+            gameController.ResetScore();
         }
     }
 

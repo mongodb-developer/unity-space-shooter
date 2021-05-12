@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour {
     void OnExplosionAnimationFinished() {
         _animator.SetBool("doExplode", false);
         gameObject.SetActive(false);
+        GameController.Score++;
     }
 
 }
