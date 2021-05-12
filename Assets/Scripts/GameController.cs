@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Realms;
 using Realms.Sync;
+using MongoDB.Bson;
 
 public class GameController : MonoBehaviour {
 
@@ -12,6 +13,9 @@ public class GameController : MonoBehaviour {
     public float timeUntilEnemy = 1.0f;
     public float minTimeUntilEnemy = 0.25f;
     public float maxTimeUntilEnemy = 2.0f;
+
+    public GameObject SparkBlasterGraphic;
+    public GameObject CrossBlasterGraphic;
 
     private Realm _realm;
     private User _realmUser;
@@ -23,7 +27,7 @@ public class GameController : MonoBehaviour {
         _realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.Anonymous());
         Debug.Log("Logged in with user " + _realmUser.Id);
         _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
-        _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
+        _playerProfile = _realm.Find<PlayerProfile>(ObjectId.Parse(_realmUser.Id));
         if(_playerProfile == null) {
             _realm.Write(() => {
                 _playerProfile = _realm.Add(new PlayerProfile(_realmUser.Id));
@@ -46,5 +50,16 @@ public class GameController : MonoBehaviour {
             }
             timeUntilEnemy = Random.Range(minTimeUntilEnemy, maxTimeUntilEnemy);
         }
+        SparkBlasterGraphic.SetActive(_playerProfile.SparkBlasterEnabled);
+        CrossBlasterGraphic.SetActive(_playerProfile.CrossBlasterEnabled);
     }
+
+    public bool IsSparkBlasterEnabled() {
+        return _playerProfile.SparkBlasterEnabled;
+    }
+
+    public bool IsCrossBlasterEnabled() {
+        return _playerProfile.CrossBlasterEnabled;
+    }
+
 }

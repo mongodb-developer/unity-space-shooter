@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float movementSpeed = 5.0f;
     public float respawnSpeed = 8.0f;
     public float weaponFireRate = 0.5f;
+    public GameController gameController;
 
     private Animator _animator;
     private float nextBlasterTime = 0.0f;
@@ -42,20 +43,24 @@ public class Player : MonoBehaviour
                         blaster.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
                     }
                 }
-                if(Input.GetKey(KeyCode.B) && Time.time > nextBlasterTime) {
-                    nextBlasterTime = Time.time + weaponFireRate;
-                    GameObject crossBlast = ObjectPool.SharedInstance.GetPooledCrossBlast();
-                    if(crossBlast != null) {
-                        crossBlast.SetActive(true);
-                        crossBlast.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
+                if(gameController.IsCrossBlasterEnabled()) {
+                    if(Input.GetKey(KeyCode.B) && Time.time > nextBlasterTime) {
+                        nextBlasterTime = Time.time + weaponFireRate;
+                        GameObject crossBlast = ObjectPool.SharedInstance.GetPooledCrossBlast();
+                        if(crossBlast != null) {
+                            crossBlast.SetActive(true);
+                            crossBlast.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
+                        }
                     }
                 }
-                if(Input.GetKey(KeyCode.V) && Time.time > nextBlasterTime) {
-                    nextBlasterTime = Time.time + weaponFireRate;
-                    GameObject sparkBlast = ObjectPool.SharedInstance.GetPooledSparkBlast();
-                    if(sparkBlast != null) {
-                        sparkBlast.SetActive(true);
-                        sparkBlast.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
+                if(gameController.IsSparkBlasterEnabled()) {
+                    if(Input.GetKey(KeyCode.V) && Time.time > nextBlasterTime) {
+                        nextBlasterTime = Time.time + weaponFireRate;
+                        GameObject sparkBlast = ObjectPool.SharedInstance.GetPooledSparkBlast();
+                        if(sparkBlast != null) {
+                            sparkBlast.SetActive(true);
+                            sparkBlast.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
+                        }
                     }
                 }
             }
