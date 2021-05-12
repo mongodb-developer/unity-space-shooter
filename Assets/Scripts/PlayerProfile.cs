@@ -22,9 +22,7 @@ public class PlayerProfile : RealmObject
     [MapTo("cross_blaster_enabled")]
     public bool CrossBlasterEnabled { get; set; }
 
-    public PlayerProfile() {
-
-    }
+    public PlayerProfile() {}
 
     public PlayerProfile(string userId) {
         this.UserId = userId;

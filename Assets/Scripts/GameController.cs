@@ -29,8 +29,20 @@ public class GameController : MonoBehaviour {
 
     async void OnEnable() {
         //_realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.Anonymous());
-        _realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.EmailPassword("nic.raboy@mongodb.com", "password1234"));
+        //_realmUser = await (App.Create(RealmAppId)).LogInAsync(Credentials.EmailPassword("nic.raboy@mongodb.com", "password1234"));
+        //var realmApp = App.Create(RealmAppId);
+        var realmApp = App.Create(new AppConfiguration(RealmAppId) {
+            MetadataPersistenceMode = MetadataPersistenceMode.NotEncrypted
+        });
+        var _realmUser = realmApp.CurrentUser;
+        if (_realmUser == null) {
+            _realmUser = await realmApp.LogInAsync(Credentials.EmailPassword("nic.raboy@mongodb.com", "password1234"));
+            _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
+        } else {
+            _realm = Realm.GetInstance(new SyncConfiguration("game", _realmUser));
+        }
         Debug.Log("Logged in with user " + _realmUser.Id);
+        //Realm.DeleteRealm(new SyncConfiguration("game", _realmUser));
         _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
         //_playerProfile = _realm.Find<PlayerProfile>(ObjectId.Parse(_realmUser.Id));
         _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
@@ -59,25 +71,29 @@ public class GameController : MonoBehaviour {
             }
             timeUntilEnemy = Random.Range(minTimeUntilEnemy, maxTimeUntilEnemy);
         }
-        SparkBlasterGraphic.SetActive(_playerProfile.SparkBlasterEnabled);
-        CrossBlasterGraphic.SetActive(_playerProfile.CrossBlasterEnabled);
+        if(_playerProfile != null) {
+            SparkBlasterGraphic.SetActive(_playerProfile.SparkBlasterEnabled);
+            CrossBlasterGraphic.SetActive(_playerProfile.CrossBlasterEnabled);
+        }
     }
 
     public bool IsSparkBlasterEnabled() {
-        return _playerProfile.SparkBlasterEnabled;
+        return _playerProfile != null ? _playerProfile.SparkBlasterEnabled : false;
     }
 
     public bool IsCrossBlasterEnabled() {
-        return _playerProfile.CrossBlasterEnabled;
+        return _playerProfile != null ? _playerProfile.CrossBlasterEnabled : false;
     }
 
     public void ResetScore() {
-        if(Score > _playerProfile.HighScore) {
-            _realm.Write(() => {
-                _playerProfile.HighScore = Score;
-            });
+        if(_playerProfile != null) {
+            if(Score > _playerProfile.HighScore) {
+                _realm.Write(() => {
+                    _playerProfile.HighScore = Score;
+                });
+            }
+            highScoreText.text = "HIGH SCORE: " + _playerProfile.HighScore.ToString();
         }
-        highScoreText.text = "HIGH SCORE: " + _playerProfile.HighScore.ToString();
         Score = 0;
     }
 
