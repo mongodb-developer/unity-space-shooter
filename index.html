@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <table id="players" style="width: 100%">
+            <tr>
+                <th style="text-align: left">Player ID</th>
+                <th>High Score</th>
+                <th>Cross Blaster</th>
+                <th>Spark Blaster</th>
+            </tr>
+        </table>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            const list = async function() {
+                var result = await fetch("https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/list")
+                    .then(response => response.json());
+                return JSON.parse(result);
+            }
+
+            const start = async function() {
+                let listResult = await list();
+                $.each(listResult, function(index, value) {
+                    $("#players")
+                        .append($("<tr>")
+                            .attr("style", "text-align: center")
+                            .append($("<td>")
+                                .attr("style", "text-align: left")
+                                .text(value._id)
+                            )
+                            .append($("<td>")
+                                .text(value.high_score)
+                            )
+                            .append($("<td>")
+                                .append($("<input>")
+                                    .attr("type", "checkbox")
+                                    .attr("name", "cross_blaster_enabled_" + value._id)
+                                    .attr("checked", value.cross_blaster_enabled)
+                                    .change(function () {
+                                        fetch(
+                                            "https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/update",
+                                            {
+                                                "method": "PUT",
+                                                "body": JSON.stringify({
+                                                    "id": value._id,
+                                                    "blasters": {
+                                                        "cross_blaster_enabled": this.checked
+                                                    }
+                                                })
+                                            }
+                                        )
+                                    })
+                                )
+                            )
+                            .append($("<td>")
+                                .append($("<input>")
+                                    .attr("type", "checkbox")
+                                    .attr("name", "spark_blaster_enabled_" + value._id)
+                                    .attr("checked", value.spark_blaster_enabled)
+                                    .change(function() {
+                                        fetch(
+                                            "https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/update",
+                                            {
+                                                "method": "PUT",
+                                                "body": JSON.stringify({
+                                                    "id": value._id,
+                                                    "blasters": {
+                                                        "spark_blaster_enabled": this.checked
+                                                    }
+                                                })
+                                            }
+                                        )
+                                    })
+                                )
+                            )
+                        );
+                });
+            }
+
+            start();
+        </script>
+    </body>
+</html>
