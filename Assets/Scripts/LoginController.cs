@@ -33,7 +33,6 @@ public class LoginController : MonoBehaviour {
             } else {
                 _realm = Realm.GetInstance(new SyncConfiguration("game", _realmUser));
             }
-            _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
             _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
             if(_playerProfile == null) {
                 _realm.Write(() => {

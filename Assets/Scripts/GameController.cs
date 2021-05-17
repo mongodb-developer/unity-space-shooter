@@ -39,9 +39,6 @@ public class GameController : MonoBehaviour {
             _realm = Realm.GetInstance(new SyncConfiguration("game", _realmUser));
         }
         Debug.Log("Logged in with user " + _realmUser.Id);
-        //Realm.DeleteRealm(new SyncConfiguration("game", _realmUser));
-        _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
-        //_playerProfile = _realm.Find<PlayerProfile>(ObjectId.Parse(_realmUser.Id));
         _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
         if(_playerProfile == null) {
             _realm.Write(() => {

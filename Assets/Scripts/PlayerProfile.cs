@@ -1,13 +1,7 @@
 using Realms;
 using Realms.Sync;
-using MongoDB.Bson;
 
-public class PlayerProfile : RealmObject
-{
-
-    // [PrimaryKey]
-    // [MapTo("_id")]
-    // public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
+public class PlayerProfile : RealmObject {
 
     [PrimaryKey]
     [MapTo("_id")]
