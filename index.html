@@ -20,12 +20,13 @@
             const start = async function() {
                 let listResult = await list();
                 $.each(listResult, function(index, value) {
+                    let playerName = value.name != undefined ? (value.name + " [" + value._id + "]") : ("Unknown Player [" + value._id + "]");
                     $("#players")
                         .append($("<tr>")
                             .attr("style", "text-align: center")
                             .append($("<td>")
                                 .attr("style", "text-align: left")
-                                .text(value._id)
+                                .text(playerName)
                             )
                             .append($("<td>")
                                 .text(value.high_score)
