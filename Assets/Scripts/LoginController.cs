@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Realms;
 using Realms.Sync;
+using Realms.Sync.Exceptions;
 using MongoDB.Bson;
 using UnityEngine.SceneManagement;
 
@@ -27,11 +28,14 @@ public class LoginController : MonoBehaviour {
             var realmApp = App.Create(new AppConfiguration(RealmAppId) {
                 MetadataPersistenceMode = MetadataPersistenceMode.NotEncrypted
             });
-            if (_realmUser == null) {
-                _realmUser = await realmApp.LogInAsync(Credentials.EmailPassword(UsernameInput.text, PasswordInput.text));
+            _realmUser = await realmApp.LogInAsync(Credentials.EmailPassword(UsernameInput.text, PasswordInput.text));
+            try {
                 _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
-            } else {
-                _realm = Realm.GetInstance(new SyncConfiguration("game", _realmUser));
+            } catch (ClientResetException clientResetEx) {
+                if(_realm != null) {
+                    _realm.Dispose();
+                }
+                clientResetEx.InitiateClientReset();
             }
             _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
             if(_playerProfile == null) {
