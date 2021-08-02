@@ -14,36 +14,21 @@ public class LoginController : MonoBehaviour {
     public InputField UsernameInput;
     public InputField PasswordInput;
 
-    public string RealmAppId;
-    private Realm _realm;
-    private User _realmUser;
-    private PlayerProfile _playerProfile;
-
     void Start() {
+        UsernameInput.text = "nic.raboy@mongodb.com";
+        PasswordInput.text = "password1234";
         LoginButton.onClick.AddListener(Login);
     }
 
     async void Login() {
-        if(UsernameInput.text != "" && PasswordInput.text != "") {
-            var realmApp = App.Create(new AppConfiguration(RealmAppId) {
-                MetadataPersistenceMode = MetadataPersistenceMode.NotEncrypted
-            });
-            _realmUser = await realmApp.LogInAsync(Credentials.EmailPassword(UsernameInput.text, PasswordInput.text));
-            try {
-                _realm = await Realm.GetInstanceAsync(new SyncConfiguration("game", _realmUser));
-            } catch (ClientResetException clientResetEx) {
-                if(_realm != null) {
-                    _realm.Dispose();
-                }
-                clientResetEx.InitiateClientReset();
-            }
-            _playerProfile = _realm.Find<PlayerProfile>(_realmUser.Id);
-            if(_playerProfile == null) {
-                _realm.Write(() => {
-                    _playerProfile = _realm.Add(new PlayerProfile(_realmUser.Id));
-                });
-            }
+        if(await RealmController.Instance.Login(UsernameInput.text, PasswordInput.text) != "") {
             SceneManager.LoadScene("MainScene");
+        }
+    }
+
+    void Update() {
+        if(Input.GetKey("escape")) {
+            Application.Quit();
         }
     }
 

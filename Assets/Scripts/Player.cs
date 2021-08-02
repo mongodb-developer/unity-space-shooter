@@ -8,7 +8,6 @@ public class Player : MonoBehaviour
     public float movementSpeed = 5.0f;
     public float respawnSpeed = 8.0f;
     public float weaponFireRate = 0.5f;
-    public GameController gameController;
 
     private Animator _animator;
     private float nextBlasterTime = 0.0f;
@@ -43,7 +42,7 @@ public class Player : MonoBehaviour
                         blaster.transform.position = new Vector3(transform.position.x + 1, transform.position.y);
                     }
                 }
-                if(gameController.IsCrossBlasterEnabled()) {
+                if(RealmController.Instance.IsCrossBlasterEnabled()) {
                     if(Input.GetKey(KeyCode.B) && Time.time > nextBlasterTime) {
                         nextBlasterTime = Time.time + weaponFireRate;
                         GameObject crossBlast = ObjectPool.SharedInstance.GetPooledCrossBlast();
@@ -53,7 +52,7 @@ public class Player : MonoBehaviour
                         }
                     }
                 }
-                if(gameController.IsSparkBlasterEnabled()) {
+                if(RealmController.Instance.IsSparkBlasterEnabled()) {
                     if(Input.GetKey(KeyCode.V) && Time.time > nextBlasterTime) {
                         nextBlasterTime = Time.time + weaponFireRate;
                         GameObject sparkBlast = ObjectPool.SharedInstance.GetPooledSparkBlast();
@@ -70,7 +69,7 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collider) {
         if(collider.tag == "Enemy" && isRespawn == false) {
             _animator.SetBool("doExplode", true);
-            gameController.ResetScore();
+            RealmController.Instance.ResetScore();
         }
     }
 

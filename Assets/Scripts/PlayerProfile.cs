@@ -10,6 +10,9 @@ public class PlayerProfile : RealmObject {
     [MapTo("high_score")]
     public int HighScore { get; set; }
 
+    [MapTo("score")]
+    public int Score { get; set; }
+
     [MapTo("spark_blaster_enabled")]
     public bool SparkBlasterEnabled { get; set; }
 
@@ -21,6 +24,7 @@ public class PlayerProfile : RealmObject {
     public PlayerProfile(string userId) {
         this.UserId = userId;
         this.HighScore = 0;
+        this.Score = 0;
         this.SparkBlasterEnabled = false;
         this.CrossBlasterEnabled = false;
     }
