@@ -2,16 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Realms;
-using Realms.Sync;
-using Realms.Sync.Exceptions;
-using MongoDB.Bson;
 using UnityEngine.SceneManagement;
 
-public class LoginController : MonoBehaviour {
+public class RegisterController : MonoBehaviour {
 
-    public Button LoginButton;
     public Button RegisterButton;
+    public Button CancelButton;
+    public InputField NameInput;
     public InputField UsernameInput;
     public InputField PasswordInput;
     public Text ErrorText;
@@ -21,24 +18,25 @@ public class LoginController : MonoBehaviour {
     }
 
     void Start() {
+        NameInput.text = "";
         UsernameInput.text = "";
         PasswordInput.text = "";
-        LoginButton.onClick.AddListener(Login);
         RegisterButton.onClick.AddListener(Register);
+        CancelButton.onClick.AddListener(Login);
     }
 
-    async void Login() {
-        string loginResponse = await RealmController.Instance.Login(UsernameInput.text, PasswordInput.text);
-        if(loginResponse == "") {
+    async void Register() {
+        string registerResponse = await RealmController.Instance.Register(NameInput.text, UsernameInput.text, PasswordInput.text);
+        if(registerResponse == "") {
             SceneManager.LoadScene("MainScene");
         } else {
             ErrorText.gameObject.SetActive(true);
-            ErrorText.text = "ERROR: " + loginResponse;
+            ErrorText.text = "ERROR: " + registerResponse;
         }
     }
 
-    void Register() {
-        SceneManager.LoadScene("RegisterScene");
+    void Login() {
+        SceneManager.LoadScene("LoginScene");
     }
 
     void Update() {
