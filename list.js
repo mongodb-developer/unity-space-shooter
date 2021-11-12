@@ -7,6 +7,7 @@ exports = async function (payload, response) {
         .db("space_shooter")
         .collection("PlayerProfile")
         .find({})
+        .sort({ high_score: -1 })
         .toArray();
 
     return JSON.stringify(docs);
