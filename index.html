@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="20">
+    <meta http-equiv="refresh" content="30">
     <style>
       body {
         background: #000;
@@ -60,7 +60,7 @@
     <script>
       const list = async function () {
         var result = await fetch(
-          "https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/list"
+          "https://us-west-2.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space_shooter_demo-hvrxp/service/leaderboard/incoming_webhook/list"
         ).then((response) => response.json());
         return JSON.parse(result);
       };
@@ -87,7 +87,7 @@
                     .attr("checked", value.cross_blaster_enabled)
                     .change(function () {
                       fetch(
-                        "https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/update",
+                        "https://us-west-2.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space_shooter_demo-hvrxp/service/leaderboard/incoming_webhook/update",
                         {
                           method: "PUT",
                           body: JSON.stringify({
@@ -109,7 +109,7 @@
                     .attr("checked", value.spark_blaster_enabled)
                     .change(function () {
                       fetch(
-                        "https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space-shooter-ubpkp/service/ProfileManager/incoming_webhook/update",
+                        "https://us-west-2.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/space_shooter_demo-hvrxp/service/leaderboard/incoming_webhook/update",
                         {
                           method: "PUT",
                           body: JSON.stringify({
